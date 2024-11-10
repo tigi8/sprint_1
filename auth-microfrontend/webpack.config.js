@@ -1,47 +1,62 @@
-const path = require('path');
-const { ModuleFederationPlugin } = require('webpack').container;
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const { ModuleFederationPlugin } = require("webpack").container;
+const path = require("path");
 
 module.exports = {
-  entry: './src/index.js',
-  mode: 'development',
+  entry: "./src/index.js", // Точка входа для микрофронтенда
+  mode: "development",
   devServer: {
-    port: 3001,
+    port: 3001, // Задаем уникальный порт для auth-microfrontend
+    open: true,
+    historyApiFallback: true,
   },
   output: {
-    publicPath: 'http://localhost:3001/',
+    path: path.resolve(__dirname, "dist"),
+    publicPath: "auto",
+    clean: true,
   },
-  plugins: [
-    new ModuleFederationPlugin({
-      name: 'auth',
-      filename: 'remoteEntry.js',
-      exposes: {
-        './Login': './src/components/Login',
-        './Register': './src/components/Register',
-      },
-      shared: {
-        react: { singleton: true, eager: true, requiredVersion: '^17.0.2' },
-        'react-dom': { singleton: true, eager: true, requiredVersion: '^17.0.2' },
-      },
-    }),
-    new HtmlWebpackPlugin({
-      template: './public/index.html',
-    }),
-  ],
   module: {
     rules: [
       {
-        test: /\.js$/,
-        use: 'babel-loader',
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            presets: ["@babel/preset-react"],
+          },
+        },
       },
       {
         test: /\.css$/,
-        use: ['style-loader', 'css-loader'],
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: [".js", ".jsx", ".json"],
   },
+  plugins: [
+    new ModuleFederationPlugin({
+      name: "authMicrofrontend", // Уникальное имя для аутентификационного микрофронтенда
+      filename: "remoteEntry.js",
+      exposes: {
+        "./Login": "./src/components/Login", // Экспорт компонента для входа
+        "./Register": "./src/components/Register", // Экспорт компонента для регистрации
+      },
+      shared: {
+        react: {
+          singleton: true,
+          requiredVersion: "^17.0.2",
+        },
+        "react-dom": {
+          singleton: true,
+          requiredVersion: "^17.0.2",
+        },
+      },
+    }),
+    new HtmlWebpackPlugin({
+      template: "./public/index.html",
+    }),
+  ],
 };
