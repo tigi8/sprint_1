@@ -1,15 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import Login from './components/Login';
-import Register from './components/Register';
+import React from "react";
+import ReactDOM from "react-dom";
+import Login from "./components/Login"; // Импортируем основной компонент для входа
+import "./styles/auth.css"; // Импортируем стили для аутентификации
 
-ReactDOM.render(
-  <React.StrictMode>
-    <div>
-      <h1>Auth Microfrontend</h1>
-      <Login />
-      <Register />
-    </div>
-  </React.StrictMode>,
-  document.getElementById('root')
+const App = () => (
+  <div>
+    <h1>Authentication Microfrontend</h1>
+    <Login /> {/* Рендеринг компонента входа */}
+  </div>
 );
+
+ReactDOM.render(<App />, document.getElementById("root"));
