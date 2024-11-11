@@ -39,6 +39,7 @@ index.js — точка входа.
 package.json и webpack.config.js.
 ```
 # Задание 2
+Ссылка: https://drive.google.com/file/d/1edbTpBmYl6McaCzt1ijOOey6uGCQMKrq/view?usp=sharing 
 
 ## 1. Компонент управления пользователями
 ```
